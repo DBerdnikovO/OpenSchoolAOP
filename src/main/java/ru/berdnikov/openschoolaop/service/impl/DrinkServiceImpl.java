@@ -1,14 +1,20 @@
 package ru.berdnikov.openschoolaop.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.berdnikov.openschoolaop.dto.DrinkDTO;
+import ru.berdnikov.openschoolaop.exception.NotFoundException;
 import ru.berdnikov.openschoolaop.mapper.DrinkMapper;
 import ru.berdnikov.openschoolaop.model.Drink;
 import ru.berdnikov.openschoolaop.repository.DrinkRepository;
-import ru.berdnikov.openschoolaop.repository.ExecutionTimeRepository;
 import ru.berdnikov.openschoolaop.service.DrinkService;
+
+import java.util.List;
 
 /**
  * @author danilaberdnikov on DrinkServiceImpl.
@@ -16,27 +22,43 @@ import ru.berdnikov.openschoolaop.service.DrinkService;
  */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class DrinkServiceImpl implements DrinkService {
     private final DrinkRepository drinkRepository;
     private final DrinkMapper drinkMapper;
 
-    @Autowired
-    public DrinkServiceImpl(DrinkRepository drinkRepository,
-                            DrinkMapper drinkMapper) {
-        this.drinkRepository = drinkRepository;
-        this.drinkMapper = drinkMapper;
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DrinkDTO> getAll(Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from, size);
+        Page<Drink> drinkPage = drinkRepository.findAll(pageable);
+        return drinkPage.map(drinkMapper::toDTO);
     }
 
-    // Переделать под аоп
     @Override
     @Transactional(readOnly = true)
     public DrinkDTO getDrinkById(Long id) {
-        Drink drink = drinkRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id: " + id)) ;
-        return drinkMapper.toDTO(drink);
+        return drinkMapper.toDTO(getDrink(id));
     }
 
     @Override
     public DrinkDTO saveDrink(DrinkDTO drinkDTO) {
         return drinkMapper.toDTO(drinkRepository.save(drinkMapper.toEntity(drinkDTO)));
+    }
+
+    //Стоит чекнуть
+    @Override
+    public void updateDrink(Long id, DrinkDTO drinkDTO) {
+        Drink updateDrink = drinkMapper.toEntity(drinkDTO);
+        drinkRepository.save(updateDrink);
+    }
+
+    @Override
+    public void deleteDrinkById(Long id) {
+        drinkRepository.deleteById(id);
+    }
+
+    private Drink getDrink(Long id) {
+        return drinkRepository.findById(id).orElseThrow(() -> new NotFoundException("Drink not found with id: " + id)) ;
     }
 }

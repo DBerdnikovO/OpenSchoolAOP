@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author danilaberdnikov on TrackTime.
+ * @author danilaberdnikov on TrackTimeModel.
  * @project OpenSchoolAOP
  */
 @Retention(RetentionPolicy.RUNTIME)

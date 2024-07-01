@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TrackTimeDTO {
+    private String annotationName;
     private String className;
     private String methodName;
     private Long executionTime;

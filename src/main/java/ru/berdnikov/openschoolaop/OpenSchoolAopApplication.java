@@ -6,13 +6,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import ru.berdnikov.openschoolaop.service.TrackTimeService;
 import ru.berdnikov.openschoolaop.utils.ThreadUtils;
 
 @RequiredArgsConstructor
 @SpringBootApplication
 public class OpenSchoolAopApplication {
-//    @Autowired
-//    private final Check check;
+
+    private final TrackTimeService trackTimeService;
 
     public static void main(String[] args) {
         SpringApplication.run(OpenSchoolAopApplication.class, args);
@@ -20,7 +21,5 @@ public class OpenSchoolAopApplication {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onReady() {
-//        check.method1();
-//        check.method2();
     }
 }

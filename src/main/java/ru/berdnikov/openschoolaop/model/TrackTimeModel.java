@@ -4,19 +4,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * @author danilaberdnikov on TrackTime.
+ * @author danilaberdnikov on TrackTimeModel.
  * @project OpenSchoolAOP
  */
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "MethodTrackTimeLog")
-public class TrackTime {
+@Entity
+@ToString
+@Table(name = "track_time")
+@EntityListeners(TrackTimeModelListener.class)
+public class TrackTimeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "annotation_name")
+    private String annotationName;
 
     @Column(name = "class_name")
     private String className;
@@ -30,7 +37,8 @@ public class TrackTime {
     @Column(name = "success")
     private Boolean success;
 
-    public TrackTime(String className, String methodName, Long executionTime, Boolean success) {
+    public TrackTimeModel(String annotationName, String className, String methodName, Long executionTime, Boolean success) {
+        this.annotationName = annotationName;
         this.className = className;
         this.methodName = methodName;
         this.executionTime = executionTime;

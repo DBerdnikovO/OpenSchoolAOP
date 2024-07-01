@@ -10,4 +10,5 @@ import ru.berdnikov.openschoolaop.model.Drink;
  */
 @Repository
 public interface DrinkRepository extends JpaRepository<Drink, Long> {
+
 }

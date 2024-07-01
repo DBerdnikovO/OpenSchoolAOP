@@ -3,7 +3,9 @@ package ru.berdnikov.openschoolaop.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.berdnikov.openschoolaop.dto.TrackTimeDTO;
-import ru.berdnikov.openschoolaop.model.TrackTime;
+import ru.berdnikov.openschoolaop.model.TrackTimeModel;
+
+import java.util.List;
 
 /**
  * @author danilaberdnikov on TrackTimeMapper.
@@ -11,8 +13,10 @@ import ru.berdnikov.openschoolaop.model.TrackTime;
  */
 @Mapper(componentModel = "spring")
 public interface TrackTimeMapper {
-    TrackTimeDTO toDTO(TrackTime entity);
+    TrackTimeDTO toDTO(TrackTimeModel trackTimeModel);
 
     @Mapping(target = "id", ignore = true)
-    TrackTime toEntity(TrackTimeDTO dto);
+    TrackTimeModel toEntity(TrackTimeDTO trackTimeDTO);
+
+    List<TrackTimeDTO> toTrackTimeDTOList(List<TrackTimeModel> trackTimeModels);
 }

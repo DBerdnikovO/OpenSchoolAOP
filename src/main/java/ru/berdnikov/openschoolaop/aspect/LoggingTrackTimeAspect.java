@@ -1,20 +1,21 @@
 package ru.berdnikov.openschoolaop.aspect;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import ru.berdnikov.openschoolaop.annotation.TrackAsyncTime;
 import ru.berdnikov.openschoolaop.dto.TrackTimeDTO;
+import ru.berdnikov.openschoolaop.exception.ProceedingJoinPointException;
 import ru.berdnikov.openschoolaop.exception.TrackTimeException;
+import ru.berdnikov.openschoolaop.service.TrackTimeService;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,34 +27,30 @@ import java.util.concurrent.CompletableFuture;
 @Aspect
 @Order(1)
 @Component
+@RequiredArgsConstructor
 public class LoggingTrackTimeAspect {
+    private final TrackTimeService trackTimeService;
+
     @Pointcut("@annotation(ru.berdnikov.openschoolaop.annotation.TrackTime)")
-    public void loggingTrackTime() {
-    }
+    public void loggingTrackTime() {}
 
     @Pointcut("@annotation(ru.berdnikov.openschoolaop.annotation.TrackAsyncTime)")
-    public void loggingTrackAsyncTime() {
-    }
-
-//    @Around("@annotation(ru.berdnikov.openschoolaop.annotation.TrackTime) || @annotation(ru.berdnikov.openschoolaop.annotation.TrackAsyncTime)")
-//    public Object methodExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-//        Signature signature = joinPoint.getSignature();
-//        String methodName = signature.getName();
-//        boolean isAsync = signature.getDeclaringType().getMethod(methodName).isAnnotationPresent(TrackAsyncTime.class);
-//        return isAsync ? methodExecutionTimeAsync(joinPoint) : methodExecutionTimeSync(joinPoint);
-//    }
+    public void loggingTrackAsyncTime() {}
 
     @Around("loggingTrackTime()")
     public Object methodExecutionTimeSync(ProceedingJoinPoint joinPoint) {
-        return executeTime(joinPoint);
+        log.info("Sync start in LoggingTrackTimeAspect");
+        return executeTime(joinPoint, "TrackTime");
     }
 
     @Around("loggingTrackAsyncTime()")
-    public CompletableFuture<Object> methodExecutionTimeAsync(ProceedingJoinPoint joinPoint) {
-        return CompletableFuture.supplyAsync(() -> executeTime(joinPoint));
+    public Object methodExecutionTimeAsync(ProceedingJoinPoint joinPoint) {
+        CompletableFuture<Object> completableFuture = CompletableFuture.supplyAsync(() ->
+                executeTime(joinPoint, "TrackAsyncTime"));
+        return completableFuture.join();
     }
 
-    private Object executeTime(ProceedingJoinPoint joinPoint) {
+    private Object executeTime(ProceedingJoinPoint joinPoint, String annotationName) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Signature signature = joinPoint.getSignature();
@@ -65,25 +62,15 @@ public class LoggingTrackTimeAspect {
             return joinPoint.proceed();
         } catch (Throwable e) {
             success = false;
-            throw new TrackTimeException(e);
+            throw new ProceedingJoinPointException(e);
         }
         finally {
             stopWatch.stop();
-            // compl future??
             long executionTime = stopWatch.getTotalTimeMillis();
-
             TrackTimeDTO trackTimeDTO = new TrackTimeDTO(
-                    className, methodName, executionTime, success
+                    annotationName, className, methodName, executionTime, success
             );
-            // сохранять???
-            System.out.println(trackTimeDTO);
+            trackTimeService.saveExecutionTime(trackTimeDTO);
         }
-    }
-
-    @AfterReturning(pointcut = "execution(* *(..)) && cflowbelow(methodExecutionTimeSync())", returning = "result")
-    public void saveData(JoinPoint joinPoint, Data result) throws Throwable {
-        System.out.println("[" + Thread.currentThread().getId() + "] " + joinPoint);
-        System.out.println(result);
-//        data = result;
     }
 }
