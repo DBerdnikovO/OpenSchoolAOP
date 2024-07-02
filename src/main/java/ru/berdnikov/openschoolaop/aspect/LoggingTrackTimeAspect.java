@@ -7,14 +7,10 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-import ru.berdnikov.openschoolaop.annotation.TrackAsyncTime;
 import ru.berdnikov.openschoolaop.dto.TrackTimeDTO;
 import ru.berdnikov.openschoolaop.exception.ProceedingJoinPointException;
-import ru.berdnikov.openschoolaop.exception.TrackTimeException;
 import ru.berdnikov.openschoolaop.service.TrackTimeService;
 
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 @Aspect
-@Order(1)
 @Component
 @RequiredArgsConstructor
 public class LoggingTrackTimeAspect {
@@ -70,7 +65,7 @@ public class LoggingTrackTimeAspect {
             TrackTimeDTO trackTimeDTO = new TrackTimeDTO(
                     annotationName, className, methodName, executionTime, success
             );
-            trackTimeService.saveExecutionTime(trackTimeDTO);
+            trackTimeService.addExecutionTime(trackTimeDTO);
         }
     }
 }

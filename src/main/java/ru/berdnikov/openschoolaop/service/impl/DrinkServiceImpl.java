@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.berdnikov.openschoolaop.annotation.SuccessLogging;
 import ru.berdnikov.openschoolaop.dto.DrinkDTO;
 import ru.berdnikov.openschoolaop.exception.NotFoundException;
 import ru.berdnikov.openschoolaop.mapper.DrinkMapper;
