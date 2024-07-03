@@ -16,7 +16,6 @@ import lombok.ToString;
 @Entity
 @ToString
 @Table(name = "drink_catalog")
-@EntityListeners(DrinkListener.class)
 public class Drink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +30,4 @@ public class Drink {
 
     @Column(name = "brand")
     private String brand;
-
-    public Drink(String name, DrinkType DrinkType, String brand) {
-        this.name = name;
-        this.drinkType = DrinkType;
-        this.brand = brand;
-    }
 }

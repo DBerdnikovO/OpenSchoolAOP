@@ -17,12 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(1)
 public class SuccessLoggingAspect {
-
     @Pointcut("within(ru.berdnikov.openschoolaop.controller.*) && @within(ru.berdnikov.openschoolaop.annotation.SuccessLogging)")
-    public void message() {}
+    public void message() {
+    }
 
     @AfterReturning(pointcut = "message()", returning = "result")
     public void afterReturningMessage(JoinPoint joinPoint, Object result) {
+        log.info("----------------------");
         log.info("Method {} executed successfully with result: {}", joinPoint.getSignature(), result);
         log.info("----------------------");
     }

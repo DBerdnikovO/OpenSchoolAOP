@@ -1,21 +1,17 @@
 package ru.berdnikov.openschoolaop.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.berdnikov.openschoolaop.annotation.SuccessLogging;
 import ru.berdnikov.openschoolaop.dto.DrinkDTO;
 import ru.berdnikov.openschoolaop.exception.NotFoundException;
 import ru.berdnikov.openschoolaop.mapper.DrinkMapper;
 import ru.berdnikov.openschoolaop.model.Drink;
 import ru.berdnikov.openschoolaop.repository.DrinkRepository;
 import ru.berdnikov.openschoolaop.service.DrinkService;
-
-import java.util.List;
 
 /**
  * @author danilaberdnikov on DrinkServiceImpl.
@@ -44,10 +40,10 @@ public class DrinkServiceImpl implements DrinkService {
 
     @Override
     public DrinkDTO saveDrink(DrinkDTO drinkDTO) {
-        return drinkMapper.toDTO(drinkRepository.save(drinkMapper.toEntity(drinkDTO)));
+        Drink drink = drinkMapper.toEntity(drinkDTO);
+        return drinkMapper.toDTO(drinkRepository.save(drink));
     }
 
-    //Стоит чекнуть
     @Override
     public void updateDrink(Long id, DrinkDTO drinkDTO) {
         Drink updateDrink = drinkMapper.toEntity(drinkDTO);
@@ -60,6 +56,6 @@ public class DrinkServiceImpl implements DrinkService {
     }
 
     private Drink getDrink(Long id) {
-        return drinkRepository.findById(id).orElseThrow(() -> new NotFoundException("Drink not found with id: " + id)) ;
+        return drinkRepository.findById(id).orElseThrow(() -> new NotFoundException("Drink not found with id: " + id));
     }
 }

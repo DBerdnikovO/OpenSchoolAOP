@@ -14,34 +14,34 @@ import ru.berdnikov.openschoolaop.model.TrackTimeModel;
  */
 @Repository
 public interface TrackTimeRepository extends JpaRepository<TrackTimeModel, Long> {
-     @Query("""
+    @Query("""
             SELECT ttm FROM TrackTimeModel ttm
             where (:className is null or ttm.className = :className)
             and (:methodName is null or ttm.methodName = :methodName)
             """)
-     Page<TrackTimeModel> allTrackTimes(
-             @Param("className") String className,
-             @Param("methodName") String methodName,
-             Pageable page
-     );
+    Page<TrackTimeModel> allTrackTimes(
+            @Param("className") String className,
+            @Param("methodName") String methodName,
+            Pageable page
+    );
 
-     @Query("""
+    @Query("""
             SELECT AVG(ttm.executionTime) FROM TrackTimeModel ttm
             where (:className is null or ttm.className = :className)
             and (:methodName is null or ttm.methodName = :methodName)
             """)
-     Double avgTrackTimes(
-             @Param("className") String className,
-             @Param("methodName") String methodName
-     );
+    Double avgTrackTimes(
+            @Param("className") String className,
+            @Param("methodName") String methodName
+    );
 
-     @Query("""
+    @Query("""
             SELECT SUM(ttm.executionTime) FROM TrackTimeModel ttm
             where (:className is null or ttm.className = :className)
             and (:methodName is null or ttm.methodName = :methodName)
             """)
-     Long sumTrackTimes(
-             @Param("className") String className,
-             @Param("methodName") String methodName
-     );
+    Long sumTrackTimes(
+            @Param("className") String className,
+            @Param("methodName") String methodName
+    );
 }

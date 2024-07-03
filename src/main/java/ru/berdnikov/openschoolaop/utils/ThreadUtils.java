@@ -5,7 +5,7 @@ package ru.berdnikov.openschoolaop.utils;
  * @project OpenSchoolAOP
  */
 public class ThreadUtils {
-    public static void waitTime(long time){
+    public static void waitTime(long time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {

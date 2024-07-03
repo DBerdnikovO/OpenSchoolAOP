@@ -3,8 +3,6 @@ package ru.berdnikov.openschoolaop.service;
 import org.springframework.data.domain.Page;
 import ru.berdnikov.openschoolaop.dto.DrinkDTO;
 
-import java.util.List;
-
 /**
  * @author danilaberdnikov on DrinkService.
  * @project OpenSchoolAOP
@@ -14,7 +12,7 @@ public interface DrinkService {
 
     DrinkDTO getDrinkById(Long id);
 
-    DrinkDTO saveDrink(DrinkDTO drinkDTO);
+    DrinkDTO saveDrink(DrinkDTO drink);
 
     void updateDrink(Long id, DrinkDTO drinkDTO);
 

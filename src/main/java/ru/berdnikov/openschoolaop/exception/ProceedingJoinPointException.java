@@ -1,13 +1,10 @@
 package ru.berdnikov.openschoolaop.exception;
 
-import ru.berdnikov.openschoolaop.annotation.Throw;
-
 /**
  * @author danilaberdnikov on ProceedingJoinPointException.
  * @project OpenSchoolAOP
  */
-@Throw
-public class ProceedingJoinPointException extends RuntimeException{
+public class ProceedingJoinPointException extends RuntimeException {
     public ProceedingJoinPointException() {
     }
 

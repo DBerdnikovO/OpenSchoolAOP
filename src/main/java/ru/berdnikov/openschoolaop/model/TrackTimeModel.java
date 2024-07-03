@@ -16,7 +16,6 @@ import lombok.ToString;
 @Entity
 @ToString
 @Table(name = "track_time")
-@EntityListeners(TrackTimeModelListener.class)
 public class TrackTimeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +35,4 @@ public class TrackTimeModel {
 
     @Column(name = "success")
     private Boolean success;
-
-    public TrackTimeModel(String annotationName, String className, String methodName, Long executionTime, Boolean success) {
-        this.annotationName = annotationName;
-        this.className = className;
-        this.methodName = methodName;
-        this.executionTime = executionTime;
-        this.success = success;
-    }
 }

@@ -9,7 +9,6 @@ import ru.berdnikov.openschoolaop.model.DrinkType;
  */
 @Data
 public class DrinkDTO {
-    private Long id;
     private String name;
     private DrinkType drinkType;
     private String brand;
