@@ -26,20 +26,26 @@ public class AsynchronouslyAspect {
     public void asyncRunnerPointcut() {
     }
 
+    //Разделить на методы
     @Around("asyncRunnerPointcut()")
     public Object runner(ProceedingJoinPoint joinPoint) {
-        if(async) {
-            return CompletableFuture.runAsync(() -> {
-                try {
-                    log.info("----------------------");
-                    log.info("Async launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());
-                    log.info("----------------------");
-                    joinPoint.proceed();
-                } catch (Throwable e) {
-                    throw new ProceedingJoinPointException(e);
-                }
-            });
-        }
+        return async ? asyncRunner(joinPoint) : syncRunner(joinPoint);
+    }
+
+    private Object asyncRunner(ProceedingJoinPoint joinPoint) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                log.info("----------------------");
+                log.info("Async launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());
+                log.info("----------------------");
+                joinPoint.proceed();
+            } catch (Throwable e) {
+                throw new ProceedingJoinPointException(e);
+            }
+        });
+    }
+
+    private Object syncRunner(ProceedingJoinPoint joinPoint) {
         try {
             log.warn("----------------------");
             log.warn("Sync launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());

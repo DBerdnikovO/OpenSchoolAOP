@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author danilaberdnikov on Drink.
@@ -14,7 +13,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @Entity
-@ToString
 @Table(name = "drink_catalog")
 public class Drink {
     @Id

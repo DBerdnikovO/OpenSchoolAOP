@@ -1,5 +1,7 @@
 package ru.berdnikov.openschoolaop.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,33 +23,49 @@ import ru.berdnikov.openschoolaop.service.TrackTimeService;
 public class TrackTimeController {
     private final TrackTimeService trackTimeService;
 
+    @Operation(
+            summary = "Получить всю статистику",
+            description = "Позволяет получить параметризированную статистику пользователей по имени класса и/или низванию метода"
+    )
     @GetMapping()
     public ResponseEntity<Page<TrackTimeDTO>> getAll(
             @RequestParam(name = "form", defaultValue = "0") Integer from,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
-            @RequestParam(name = "className", required = false) String className,
-            @RequestParam(name = "methodName", required = false) String methodName) {
+            @RequestParam(name = "className", required = false) @Parameter(description = "Имя класса") String className,
+            @RequestParam(name = "methodName", required = false) @Parameter(description = "Название метода")  String methodName) {
         Page<TrackTimeDTO> trackTimeDTOS = trackTimeService.getAllTrackTimes(from, size, className, methodName);
         return ResponseEntity.ok().body(trackTimeDTOS);
     }
 
+    @Operation(
+            summary = "Получить статистику по id",
+            description = "Позволяет получить информацию о времени выполненния по id"
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<TrackTimeDTO> getTrackTimeById(@PathVariable Long id) {
+    public ResponseEntity<TrackTimeDTO> getTrackTimeById(@PathVariable @Parameter(description = "Id напитка") Long id) {
         return ResponseEntity.ok().body(trackTimeService.getTrackTimeById(id));
     }
 
+    @Operation(
+            summary = "Получить среднее время выполнения методов",
+            description = "Позволяет получить информацию о среднем времени выполнения методов в зависимости от имени класса и/или названия метода"
+    )
     @GetMapping("/avg")
     public ResponseEntity<Double> getAvgTrackTimes(
-            @RequestParam(name = "className", required = false) String className,
-            @RequestParam(name = "methodName", required = false) String methodName) {
+            @RequestParam(name = "className", required = false) @Parameter(description = "Имя класса") String className,
+            @RequestParam(name = "methodName", required = false) @Parameter(description = "Название метода") String methodName) {
         Double avg = trackTimeService.getAvgTrackTimes(className, methodName);
         return ResponseEntity.ok().body(avg);
     }
 
+    @Operation(
+            summary = "Получить общее время выполнения методов",
+            description = "Позволяет получить информацию о суммарном времени выполнения методов в зависимости от имени класса и/или названия метода"
+    )
     @GetMapping("/sum")
     public ResponseEntity<Long> getSumTrackTimes(
-            @RequestParam(name = "className", required = false) String className,
-            @RequestParam(name = "methodName", required = false) String methodName) {
+            @RequestParam(name = "className", required = false) @Parameter(description = "Имя класса") String className,
+            @RequestParam(name = "methodName", required = false) @Parameter(description = "Название метода") String methodName) {
         Long sum = trackTimeService.getSumTrackTimes(className, methodName);
         return ResponseEntity.ok().body(sum);
     }

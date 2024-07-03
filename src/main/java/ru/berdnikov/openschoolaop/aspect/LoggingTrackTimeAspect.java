@@ -42,7 +42,7 @@ public class LoggingTrackTimeAspect {
     @Around("loggingTrackTime()")
     public Object methodExecutionTimeSync(ProceedingJoinPoint joinPoint) {
         log.info("----------------------");
-        log.info("Async launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());
+        log.info("Sync launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());
         log.info("----------------------");
         return executeTime(joinPoint, "TrackTime");
     }

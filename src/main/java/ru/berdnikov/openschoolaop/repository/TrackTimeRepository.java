@@ -16,8 +16,8 @@ import ru.berdnikov.openschoolaop.model.TrackTimeModel;
 public interface TrackTimeRepository extends JpaRepository<TrackTimeModel, Long> {
     @Query("""
             SELECT ttm FROM TrackTimeModel ttm
-            where (:className is null or ttm.className = :className)
-            and (:methodName is null or ttm.methodName = :methodName)
+            WHERE (?1 IS NULL OR ttm.className = ?1)
+            AND (?2 IS NULL OR ttm.methodName = ?2)
             """)
     Page<TrackTimeModel> allTrackTimes(
             @Param("className") String className,
@@ -27,8 +27,8 @@ public interface TrackTimeRepository extends JpaRepository<TrackTimeModel, Long>
 
     @Query("""
             SELECT AVG(ttm.executionTime) FROM TrackTimeModel ttm
-            where (:className is null or ttm.className = :className)
-            and (:methodName is null or ttm.methodName = :methodName)
+            WHERE (?1 IS NULL OR ttm.className = ?1)
+            AND (?2 IS NULL OR ttm.methodName = ?2)
             """)
     Double avgTrackTimes(
             @Param("className") String className,
@@ -37,8 +37,8 @@ public interface TrackTimeRepository extends JpaRepository<TrackTimeModel, Long>
 
     @Query("""
             SELECT SUM(ttm.executionTime) FROM TrackTimeModel ttm
-            where (:className is null or ttm.className = :className)
-            and (:methodName is null or ttm.methodName = :methodName)
+            WHERE (?1 IS NULL OR ttm.className = ?1)
+            AND (?2 IS NULL OR ttm.methodName = ?2)
             """)
     Long sumTrackTimes(
             @Param("className") String className,
