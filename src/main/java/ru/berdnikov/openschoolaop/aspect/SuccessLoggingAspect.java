@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import ru.berdnikov.openschoolaop.exception.ObjectNullException;
 
 /**
  * @author danilaberdnikov on SuccessLoggingAspect.
@@ -23,8 +24,12 @@ public class SuccessLoggingAspect {
 
     @AfterReturning(pointcut = "message()", returning = "result")
     public void afterReturningMessage(JoinPoint joinPoint, Object result) {
-        log.info("----------------------");
-        log.info("Method {} executed successfully with result: {}", joinPoint.getSignature(), result);
-        log.info("----------------------");
+        if (result == null) {
+            throw new ObjectNullException("Method" + joinPoint.getSignature() + " return null");
+        } else {
+            log.info("----------------------");
+            log.info("Method {} executed successfully with result: {}", joinPoint.getSignature(), result);
+            log.info("----------------------");
+        }
     }
 }

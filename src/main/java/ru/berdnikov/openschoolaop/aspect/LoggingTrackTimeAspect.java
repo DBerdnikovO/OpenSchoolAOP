@@ -11,7 +11,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-import ru.berdnikov.openschoolaop.annotation.Asynchronously;
 import ru.berdnikov.openschoolaop.dto.TrackTimeDTO;
 import ru.berdnikov.openschoolaop.exception.ProceedingJoinPointException;
 import ru.berdnikov.openschoolaop.service.TrackTimeService;
@@ -40,7 +39,15 @@ public class LoggingTrackTimeAspect {
     public void loggingTrackAsyncTime() {
     }
 
-    @Around("loggingTrackAsyncTime() || loggingTrackTime()")
+    @Around("loggingTrackTime()")
+    public Object methodExecutionTimeSync(ProceedingJoinPoint joinPoint) {
+        log.info("----------------------");
+        log.info("Async launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());
+        log.info("----------------------");
+        return executeTime(joinPoint, "TrackTime");
+    }
+
+    @Around("loggingTrackAsyncTime()")
     public Object methodExecutionTimeAsync(ProceedingJoinPoint joinPoint) {
         if(async) {
             log.info("----------------------");
@@ -50,10 +57,8 @@ public class LoggingTrackTimeAspect {
                     executeTime(joinPoint, "TrackAsyncTime"));
             return completableFuture.join();
         }
-        log.info("----------------------");
-        log.info("Sync launch in class:{}, method {}}", joinPoint.getSignature().getDeclaringType().getSimpleName(), joinPoint.getSignature().getName());
-        log.info("----------------------");
-        return executeTime(joinPoint, "TrackTime");
+        log.warn("TrackAsyncTime worked when TrackTime was expected, please, enable async in service");
+        return null;
     }
 
     private Object executeTime(ProceedingJoinPoint joinPoint, String annotationName) {

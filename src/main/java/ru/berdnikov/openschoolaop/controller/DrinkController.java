@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.berdnikov.openschoolaop.annotation.SuccessLogging;
 import ru.berdnikov.openschoolaop.annotation.TrackAsyncTime;
+import ru.berdnikov.openschoolaop.annotation.TrackTime;
 import ru.berdnikov.openschoolaop.dto.DrinkDTO;
 import ru.berdnikov.openschoolaop.service.DrinkService;
 
@@ -24,8 +25,8 @@ public class DrinkController {
     private final DrinkService drinkService;
 
     @GetMapping
-//    @TrackTime
-    @TrackAsyncTime
+    @TrackTime
+//    @TrackAsyncTime
     public ResponseEntity<Page<DrinkDTO>> getAll(
             @RequestParam(name = "from", defaultValue = "0") Integer from,
             @RequestParam(name = "size", defaultValue = "10") Integer size) {
