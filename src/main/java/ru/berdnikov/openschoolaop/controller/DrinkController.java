@@ -27,7 +27,7 @@ public class DrinkController {
     private final DrinkService drinkService;
 
     @Operation(
-            summary = "Получить все напитик",
+            summary = "Получить все напитки",
             description = "Позволяет получить напитки по размеру страницы"
     )
     @GetMapping

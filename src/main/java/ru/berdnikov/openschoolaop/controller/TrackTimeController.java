@@ -32,7 +32,7 @@ public class TrackTimeController {
             @RequestParam(name = "form", defaultValue = "0") Integer from,
             @RequestParam(name = "size", defaultValue = "10") Integer size,
             @RequestParam(name = "className", required = false) @Parameter(description = "Имя класса") String className,
-            @RequestParam(name = "methodName", required = false) @Parameter(description = "Название метода")  String methodName) {
+            @RequestParam(name = "methodName", required = false) @Parameter(description = "Название метода") String methodName) {
         Page<TrackTimeDTO> trackTimeDTOS = trackTimeService.getAllTrackTimes(from, size, className, methodName);
         return ResponseEntity.ok().body(trackTimeDTOS);
     }
@@ -42,7 +42,7 @@ public class TrackTimeController {
             description = "Позволяет получить информацию о времени выполненния по id"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<TrackTimeDTO> getTrackTimeById(@PathVariable @Parameter(description = "Id напитка") Long id) {
+    public ResponseEntity<TrackTimeDTO> getTrackTimeById(@PathVariable @Parameter(description = "Id времени выполнения") Long id) {
         return ResponseEntity.ok().body(trackTimeService.getTrackTimeById(id));
     }
 

@@ -2,7 +2,6 @@ package ru.berdnikov.openschoolaop.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.berdnikov.openschoolaop.annotation.Asynchronously;
 import ru.berdnikov.openschoolaop.dto.TrackTimeDTO;
 import ru.berdnikov.openschoolaop.exception.NotFoundException;
-import ru.berdnikov.openschoolaop.exception.ProceedingJoinPointException;
 import ru.berdnikov.openschoolaop.mapper.TrackTimeMapper;
 import ru.berdnikov.openschoolaop.model.TrackTimeModel;
 import ru.berdnikov.openschoolaop.repository.TrackTimeRepository;
 import ru.berdnikov.openschoolaop.service.TrackTimeService;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author danilaberdnikov on TrackTimeServiceImpl.

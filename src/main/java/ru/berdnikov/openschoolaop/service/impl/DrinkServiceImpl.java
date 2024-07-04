@@ -35,7 +35,8 @@ public class DrinkServiceImpl implements DrinkService {
     @Override
     @Transactional(readOnly = true)
     public DrinkDTO getDrinkById(Long id) {
-        return drinkMapper.toDTO(getDrink(id));
+        Drink drink = getDrink(id);
+        return drinkMapper.toDTO(drink);
     }
 
     @Override
